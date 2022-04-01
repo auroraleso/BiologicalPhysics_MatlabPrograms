@@ -1,0 +1,60 @@
+%define parameters 
+L = 10; %cube dimension
+N = 100; % number of particles
+M = 5; %number of voxels in my cube for dimension (M*M*M is total number)
+
+%for the external cube
+vert = [0 0 0;L 0 0;L L 0;0 10 0;0 0 10;10 0 10;10 10 10;0 10 10];
+fac = [1 2 6 5;2 3 7 6;3 4 8 7;4 1 5 8;1 2 3 4;5 6 7 8];
+
+for i = 1:10
+    g1 = rand(500,3) ; 
+    g2 = rand(500,3) ;
+    figure(1)
+    clf
+    patch('Vertices',vert,'Faces',fac,...
+        'FaceVertexCData',hsv(6),'FaceColor','flat', ...
+        'FaceAlpha', 0);
+    view(3)
+    axis vis3d
+    rotate3d
+    xlabel('x')
+    ylabel('y')
+    zlabel('z')
+    hold on
+end
+
+
+
+for i = 0:9
+    for j = 0:9
+        for k = 0:9
+            vert_voxel = [i j k ; (i+1) j k ; (i+1) (j+1) k ; i (1+j) k ; i j (1+k) ; (1+i) j (1+k) ; (1+i) (1+j) (1+k) ; i (1+j) (1+k)];
+            patch('Vertices',vert_voxel,'Faces',fac,...
+        'FaceVertexCData',hsv(6),'FaceColor','flat', ...
+        'FaceAlpha', 0);
+            view(3)
+            axis vis3d
+            rotate3d
+            xlabel('x')
+            ylabel('y')
+            zlabel('z')
+            hold on
+        end
+
+    end
+end
+
+
+
+%position of particles: let's first generate a 3N array 
+%and then reshape it in a N x 3 matrix: columns will be our (x,y,z)
+
+pos_array = L.*rand(3*N,1);
+pos = reshape(pos_array,[N,3])
+
+x = pos(:,1);
+y = pos(:,2);
+z = pos(:,3);
+
+plot3(x,y,z,'.')
