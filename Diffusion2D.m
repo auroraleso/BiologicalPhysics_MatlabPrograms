@@ -14,6 +14,7 @@ function Diffusion2Dim(T, dt, D)
     title('Plot of the particle moving along its path');
     xlabel('x (\mu m)');
     ylabel('y (\mu m)');
+    grid on;
     axis([-2 2 -2 2]);
     hold on;
     % Generate the semi-casual path and plot a moving point
@@ -36,6 +37,7 @@ function Diffusion2Dim(T, dt, D)
     xlabel('x (\mu m)');
     ylabel('y (\mu m)');
     axis([-2 2 -2 2]);
+    grid on;
     hold on;
     scatter(p(1,1),p(2,1),'filled', 'r');
     hold on;

@@ -1,4 +1,4 @@
-Diffusion3Dim(1e-3,1e-5,220);
+Diffusion3Dim(1e-3,1e-5,100);
 
 function Diffusion3Dim(T, dt, D)
 
@@ -16,6 +16,7 @@ function Diffusion3Dim(T, dt, D)
     ylabel('y (\mu m)');
     zlabel('z (\mu m)');
     axis([-1.5 1.5 -1.5 1.5 -1.5 1.5]);
+    grid on;
     hold on;
 
     view(3);
@@ -29,7 +30,7 @@ function Diffusion3Dim(T, dt, D)
             dr = sigma * randn(3,1);
             p(:,i+1) = p(:,i)+ dr;
             plot3(p(1,i+1),p(2,i+1),p(3,i+1),'o','MarkerSize',5,'MarkerFaceColor','red');
-            pause(0.1);
+            pause(0.02);
             hold on;
             
         end
@@ -45,8 +46,10 @@ function Diffusion3Dim(T, dt, D)
     xlabel('x (\mu m)');
     ylabel('y (\mu m)');
     zlabel('z (\mu m)');
+    grid on;
     axis([-1.5 1.5 -1.5 1.5 -1.5 1.5]);
     hold on;
+    
     plot3(p(1,1),p(2,1),p(3,1),'o','MarkerSize',5,'MarkerFaceColor','red' );
     hold on;
     plot3(p(1,N),p(2,N),p(3,N),'o','MarkerSize',5,'MarkerFaceColor','red' );
