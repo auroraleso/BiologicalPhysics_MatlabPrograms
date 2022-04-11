@@ -1,4 +1,4 @@
-DualStateModel(0.1,1000,0.02,0.04,50)
+DualStateModel(0.1,10000,0.02,0.04,50)
 
 function DualStateModel(dt,T,alpha,beta,Io)
 %{
@@ -74,7 +74,12 @@ ylabel('Absolute frequency [1/s]')
 
 %compute open and closure state durations
 
-state_2 = logical([1 state ~state(end)]);
+state_2 = logical([1 state ~state(end)]) ;
+
+%state_2 is an array with 1 at the beginning (initial state open, then we
+%have in queue the array state and at the end we set the negated last
+%element of the array state. 
+
 
 %the ~ is the logical negation of the following element (in our case, the
 % state vector). state(end) is the last element of state
@@ -108,7 +113,7 @@ of the first array dimension in A whose size does not equal 1.
 
 %}
 
-open_array = diff(open_array(~state_2))
+open_array = diff(open_array(~state_2));
 
 
 %{
@@ -129,8 +134,34 @@ the first array dimension whose size does not equal 1:
   matrix.
 
 %}
-open_array (open_array == 0) = []
 
+open_array (open_array == 0) = [];
+%this operation removes all 0 entries maintaining all the others. 
+
+%plot the histogram of opened channel state
+figure;
+[f_o,v_o] = hist(open_array * dt, 50);
+hist(open_array * dt, 50);
+
+%{
+    counts = hist(___) returns a row vector, counts, containing the number 
+    of elements in each bin.
+    [counts,centers] = hist(___) returns an additional row vector, centers, 
+    indicating the location of each bin center on the x-axis.
+%}
+
+%set labels and title
+title('Statistics of opened channel state in simulation')
+xlabel('Duration [ms]')
+ylabel('Absolute frequency [1/s]')
+
+hold on;
+
+t_o = 0;v_o(end)/100:v_o(end);
+plot(t_o,f_o(1)* exp(-beta*t_o),'r');
+
+
+%let's do the same for the closure condition
 closed_array = cumsum(~state_2);
 closed_array = diff(closed_array(state_2));
 closed_array(closed_array == 0) = [];
@@ -146,24 +177,9 @@ xlabel('Duration [ms]')
 ylabel('Absolute frequency [1/s]')
 
 hold on;
-
 t_c = 0;v_c(end)/100:v_c(end);
 plot(t_c,f_c(1)* exp(-alpha*t_c),'r');
 
-%plot the histogram of opened channel state
-figure;
-[f_o,v_o] = hist(open_array * dt, 30);
-hist(open_array * dt, 30);
-
-%set labels and title
-title('Statistics of opened channel state in simulation')
-xlabel('Duration [ms]')
-ylabel('Absolute frequency [1/s]')
-
-hold on;
-
-t_o = 0;v_o(end)/100:v_o(end);
-plot(t_o,f_o(1)* exp(-beta*t_o),'r');
 
 
 
